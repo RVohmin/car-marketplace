@@ -9,6 +9,6 @@ class StubTest {
 
     @Test
     fun `My second  test`() {
-
+        assertEquals(16, 4 * 4)
     }
 }
