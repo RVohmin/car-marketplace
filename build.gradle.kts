@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     kotlin("jvm")
 }
@@ -11,8 +13,9 @@ allprojects {
         mavenCentral()
         maven { url = uri("https://jitpack.io") }
     }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+}
+subprojects {
+    tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "17"
     }
 }
