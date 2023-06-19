@@ -1,1 +1,0 @@
-package ru.vohmin.marketplace.blackbox
