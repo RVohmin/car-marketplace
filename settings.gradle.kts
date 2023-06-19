@@ -14,12 +14,10 @@ pluginManagement {
     }
 }
 
-include("m1l1-hello")
+//include("m1l1-hello")
 include("ok-marketplace-acceptance")
 
 include("ok-marketplace-api-v1-jackson")
-include("ok-marketplace-api-v2-kmp")
 
 include("ok-marketplace-common")
 include("ok-marketplace-mappers-v1")
-include("ok-marketplace-mappers-v2")
