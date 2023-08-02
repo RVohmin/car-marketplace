@@ -37,8 +37,14 @@ include("car-marketplace-api-v1-jackson")
 include("car-marketplace-common")
 include("car-marketplace-mappers-v1")
 
-include("car-marketplace-stubs")
+include("car-marketplace-lib-cor")
 include("car-marketplace-biz")
+include("car-marketplace-stubs")
 
 include("car-marketplace-app-spring")
 include("car-marketplace-app-kafka")
+
+
+include("car-marketplace-lib-logging-common")
+include("car-marketplace-lib-logging-kermit")
+include("car-marketplace-lib-logging-logback")
