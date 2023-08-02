@@ -8,6 +8,8 @@ pluginManagement {
     val springDependencyManagementVersion: String by settings
     val pluginSpringVersion: String by settings
     val pluginJpa: String by settings
+    val pluginShadow: String by settings
+    val bmuschkoVersion: String by settings
 
     plugins {
         kotlin("jvm") version kotlinVersion apply false
@@ -19,7 +21,11 @@ pluginManagement {
         kotlin("plugin.spring") version pluginSpringVersion
         kotlin("plugin.jpa") version pluginJpa
 
+        id("com.bmuschko.docker-java-application") version bmuschkoVersion apply false
+        id("com.bmuschko.docker-spring-boot-application") version bmuschkoVersion apply false
+        id("com.bmuschko.docker-remote-api") version bmuschkoVersion apply false
         id("org.openapi.generator") version openapiVersion apply false
+        id("com.github.johnrengelman.shadow") version pluginShadow apply false
     }
 }
 
@@ -35,3 +41,4 @@ include("car-marketplace-stubs")
 include("car-marketplace-biz")
 
 include("car-marketplace-app-spring")
+include("car-marketplace-app-kafka")
