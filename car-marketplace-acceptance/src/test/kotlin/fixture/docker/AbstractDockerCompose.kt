@@ -11,15 +11,15 @@ private val log = KotlinLogging.logger {}
 /**
  * apps - список приложений в docker-compose. Первое приложение - "главное", его url возвращается как inputUrl
  * (например ваш сервис при работе по rest или брокер сообщений при работе с брокером)
- * dockerComposeName - имя docker-compose файла (относительно ok-marketplace-acceptance/docker-compose)
+ * dockerComposeName - имя docker-compose файла (относительно car-marketplace-acceptance/docker-compose)
  */
 abstract class AbstractDockerCompose(
     private val apps: List<AppInfo>,
     private val dockerComposeName: String)
-: DockerCompose {
+    : DockerCompose {
 
     constructor(service: String, port: Int, dockerComposeName: String)
-        : this(listOf(AppInfo(service, port)), dockerComposeName)
+            : this(listOf(AppInfo(service, port)), dockerComposeName)
     private fun getComposeFile(): File {
         val file = File("docker-compose/$dockerComposeName")
         if (!file.exists()) throw IllegalArgumentException("file $dockerComposeName not found!")

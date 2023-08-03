@@ -4,8 +4,9 @@ plugins {
 
 kotlin {
     jvm {}
-    macosX64 {}
     linuxX64 {}
+    macosX64 {}
+    macosArm64 {}
 
     sourceSets {
         val coroutinesVersion: String by project
@@ -19,6 +20,7 @@ kotlin {
 
                 implementation(project(":car-marketplace-common"))
                 implementation(project(":car-marketplace-stubs"))
+                implementation(project(":car-marketplace-lib-cor"))
             }
         }
         @Suppress("UNUSED_VARIABLE")

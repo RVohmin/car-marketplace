@@ -1,4 +1,4 @@
-package ru.otus.vohmin.marketplace.cor
+package ru.vohmin.marketplace.cor
 
 abstract class AbstractCorExec<T>(
     override val title: String,

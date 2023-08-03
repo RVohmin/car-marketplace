@@ -6,20 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import ru.vohmin.api.v1.models.AdOffersRequest
 import ru.vohmin.api.v1.models.AdOffersResponse
-import ru.vohmin.marketplace.common.MkplContext
-import ru.vohmin.marketplace.mappers.v1.fromTransport
-import ru.vohmin.marketplace.mappers.v1.toTransportOffers
-import ru.vohmin.marketplace.springapp.service.MkplAdBlockingProcessor
+import ru.vohmin.marketplace.app.common.MkplAppSettings
 
 @RestController
 @RequestMapping("v1/ad")
-class OfferController(private val processor: MkplAdBlockingProcessor) {
+class OfferController(
+    private val appSettings: MkplAppSettings
+) {
+    private val logger by lazy { appSettings.logger.logger(AdController::class) }
 
     @PostMapping("offers")
-    fun searchOffers(@RequestBody request: AdOffersRequest): AdOffersResponse {
-        val context = MkplContext()
-        context.fromTransport(request)
-        processor.exec(context)
-        return context.toTransportOffers()
-    }
+    suspend fun searchOffers(@RequestBody request: AdOffersRequest): AdOffersResponse =
+        processV1(appSettings, request, logger, "ad-offers")
 }

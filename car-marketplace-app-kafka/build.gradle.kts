@@ -13,7 +13,7 @@ docker {
         mainClassName.set(application.mainClass.get())
         baseImage.set("openjdk:17")
         maintainer.set("(c) Vohmin")
-//        ports.set(listOf(8080))
+        ports.set(listOf(8080))
         val imageName = project.name
         images.set(
             listOf(
@@ -31,6 +31,9 @@ dependencies {
     val atomicfuVersion: String by project
     val logbackVersion: String by project
     val kotlinLoggingJvmVersion: String by project
+
+    implementation(project(":car-marketplace-app-common"))
+
     implementation("org.apache.kafka:kafka-clients:$kafkaVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
     implementation("org.jetbrains.kotlinx:atomicfu:$atomicfuVersion")
@@ -45,6 +48,8 @@ dependencies {
     implementation(project(":car-marketplace-mappers-v1"))
     // logic
     implementation(project(":car-marketplace-biz"))
+
+    implementation(project(":car-marketplace-lib-logging-logback"))
 
     testImplementation(kotlin("test-junit"))
 }

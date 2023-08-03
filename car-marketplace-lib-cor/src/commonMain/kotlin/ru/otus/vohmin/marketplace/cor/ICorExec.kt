@@ -1,4 +1,4 @@
-package ru.otus.vohmin.marketplace.cor
+package ru.vohmin.marketplace.cor
 
 /**
  * Блок кода, который обрабатывает контекст. Имеет имя и описание

@@ -1,4 +1,4 @@
-package ru.otus.vohmin.marketplace.cor
+package ru.vohmin.marketplace.cor
 
 class CorWorker<T>(
     title: String,

@@ -2,7 +2,6 @@ package ru.vohmin.marketplace.cor
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import ru.otus.vohmin.marketplace.cor.*
 import kotlin.js.JsName
 import kotlin.test.Test
 import kotlin.test.assertEquals
