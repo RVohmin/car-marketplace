@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
-import kotlinx.datetime.Clock
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -13,7 +12,9 @@ import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.errors.WakeupException
-import ru.vohmin.marketplace.biz.MkplAdProcessor
+import ru.vohmin.marketplace.api.logs.mapper.toLog
+import ru.vohmin.marketplace.app.common.MkplAppSettings
+import ru.vohmin.marketplace.app.common.process
 import ru.vohmin.marketplace.common.MkplContext
 import java.time.Duration
 import java.util.*
@@ -31,11 +32,13 @@ interface ConsumerStrategy {
 class AppKafkaConsumer(
     private val config: AppKafkaConfig,
     consumerStrategies: List<ConsumerStrategy>,
-    private val processor: MkplAdProcessor = MkplAdProcessor(),
+    setting: MkplAppSettings = corSettings,
     private val consumer: Consumer<String, String> = config.createKafkaConsumer(),
     private val producer: Producer<String, String> = config.createKafkaProducer()
 ) {
+    private val logger = setting.logger.logger(AppKafkaConsumer::class)
     private val process = atomic(true) // пояснить
+    private val processor = setting.processor
     private val topicsAndStrategyByInputTopic = consumerStrategies.associate {
         val topics = it.topics(config)
         topics.input to TopicsAndStrategy(topics.input, topics.output, it)
@@ -52,21 +55,13 @@ class AppKafkaConsumer(
                     log.info { "Receive ${records.count()} messages" }
 
                 records.forEach { record: ConsumerRecord<String, String> ->
-                    try {
-                        val ctx = MkplContext(
-                            timeStart = Clock.System.now(),
-                        )
-                        log.info { "process ${record.key()} from ${record.topic()}:\n${record.value()}" }
-                        val (_, outputTopic, strategy) = topicsAndStrategyByInputTopic[record.topic()]
-                            ?: throw RuntimeException("Receive message from unknown topic ${record.topic()}")
+                    log.info { "process ${record.key()} from ${record.topic()}:\n${record.value()}" }
+                    val (_, outputTopic, strategy) = topicsAndStrategyByInputTopic[record.topic()] ?: throw RuntimeException("Receive message from unknown topic ${record.topic()}")
 
-                        strategy.deserialize(record.value(), ctx)
-                        processor.exec(ctx)
-
-                        sendResponse(ctx, strategy, outputTopic)
-                    } catch (ex: Exception) {
-                        log.error(ex) { "error" }
-                    }
+                    processor.process(logger, "kafka",
+                        { strategy.deserialize(record.value(), this) },
+                        { sendResponse(this, strategy, outputTopic) },
+                        { toLog("kafka") })
                 }
             }
         } catch (ex: WakeupException) {

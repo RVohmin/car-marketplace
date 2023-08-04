@@ -1,4 +1,4 @@
-package ru.vohmin.marketplace.springapp.service
+package ru.otus.otuskotlin.markeplace.springapp.service
 
 import kotlinx.coroutines.runBlocking
 import org.springframework.stereotype.Service
